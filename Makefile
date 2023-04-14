@@ -16,8 +16,18 @@ endif
 
 COMP=${CC} ${CFLAGS} -c
 
-all: tomato.c
+all: tomato.o
 	${AR} rc ${OUT} *.o
 
 tomato.o: src/tomato.c
 	${COMP} src/tomato.c
+
+test: all
+	${CC} -c test/test.c
+	${CC} test.o tomato.a -o test_exe
+	./test_exe
+
+clean:
+	rm *.o
+	rm *.a
+	rm test_exe
