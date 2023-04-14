@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 #include <GLFW/glfw3native.h>
 
+#include <stdio.h>
+
 #ifdef __linux__
 tm_Window tm_createWindow(int w, int h, char* title) {
 	tm_Window win = {0};
@@ -13,10 +15,13 @@ tm_Window tm_createWindow(int w, int h, char* title) {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	win.win = glfwCreateWindow(w, h, title, 0, 0);
+	glfwMakeContextCurrent(win.win);
+	glfwSwapInterval(1);
 
 	return win;
 }
 #elif __APPLE__
+// WARN: Dodgy fuckery... might not even compile.
 #include <Metal/Metal.h>
 tm_Window tm_createWindow(int w, int h, char* title) {
 	tm_Widnow win = {0};
@@ -27,10 +32,27 @@ tm_Window tm_createWindow(int w, int h, char* title) {
 	NSWindow *nswindow = glfwGetCocoaWindow(window);
 	nswindow.contentView.layer = swapchain;
 	nswindow.contentView.wantsLayer = YES;
+	glfwMakeContextCurrent(win.win);
+	glfwSwapInterval(1);
 
 	return win;
 }
 #else
-tm_Window tm_createWindow(int w, int h, char* title) {}
+tm_Window tm_createWindow(int w, int h, char* title) {
+	printf("tm_createWindow not implemented yet!\n");
+}
 #endif
+
+int tm_windowShouldClose(tm_Window win) {
+	return glfwWindowShouldClose(win.win);
+}
+
+void tm_closeWindow(tm_Window win) {
+	glfwTerminate();
+}
+
+void tm_processWindow(tm_Window win) {
+	glfwSwapBuffers(win.win);
+        glfwPollEvents();
+}
 

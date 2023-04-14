@@ -1,6 +1,6 @@
 UNAME := $(shell uname)
 
-CFLAGS=-pipe -O0
+CFLAGS=-pipe -O3
 LOPTIONS=
 CC=
 AR=ar
@@ -19,11 +19,14 @@ endif
 
 COMP=${CC} ${CFLAGS} -c
 
-all: tomato.o sokol-impl.o
+all: tomato.o sokol-impl.o window.o
 	${AR} rc ${OUT} *.o
 
 tomato.o: src/tomato.c
 	${COMP} src/tomato.c
+
+window.o: src/window.c
+	${COMP} src/window.c
 
 sokol-impl.o: src/sokol-impl.c
 	${COMP} src/sokol-impl.c
