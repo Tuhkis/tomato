@@ -11,17 +11,18 @@ int tm_init() {
 	sg_setup(&(sg_desc){
 		.logger.func = slog_func,
 	});
-	return 1;
-}
-
-void tm_beginDraw(tm_Window win) {
 	passAction = (sg_pass_action) {
 		.colors[0] = { .action = SG_ACTION_CLEAR, .value = { 1.0f, 0.0f, 0.0f, 1.0f } }
 	};
 
+	return 1;
+}
+
+void tm_beginDraw(tm_Window win) {
 	int curWidth, curHeight;
         glfwGetFramebufferSize(win.win, &curWidth, &curHeight);
         sg_begin_default_pass(&passAction, curWidth, curHeight);
+	passAction.colors->value.g += 0.005f;
 }
 
 void tm_endDraw(tm_Window win) {
