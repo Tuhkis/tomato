@@ -19,11 +19,14 @@ endif
 
 COMP=${CC} ${CFLAGS} -c
 
-all: tomato.o
+all: tomato.o sokol-impl.o
 	${AR} rc ${OUT} *.o
 
 tomato.o: src/tomato.c
 	${COMP} src/tomato.c
+
+sokol-impl.o: src/sokol-impl.c
+	${COMP} src/sokol-impl.c
 
 test: all
 	${CC} -c test/test.c
